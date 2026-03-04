@@ -99,3 +99,121 @@ Authorization: Bearer <jwt-token>
 - `POST /api/tasks/{taskId}/attachments`
 - `GET /api/tasks/{taskId}/attachments`
 
+
+## UML Diagram
+
+```mermaid
+classDiagram
+direction LR
+
+class AuthController
+class UserController
+class ProjectController
+class TaskController
+
+class AuthService
+class ProjectService
+class TaskService
+
+class UserRepository
+class ProjectRepository
+class TaskRepository
+class TaskCommentRepository
+class AttachmentRepository
+
+class SecurityConfig
+class JwtAuthenticationFilter
+class JwtService
+class CustomUserDetailsService
+class TokenBlacklistService
+
+class User {
+  +Long id
+  +String name
+  +String email
+  +String password
+  +Role role
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+class Project {
+  +Long id
+  +String name
+  +String description
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+class Task {
+  +Long id
+  +String title
+  +String description
+  +LocalDate dueDate
+  +TaskStatus status
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+class TaskComment {
+  +Long id
+  +String content
+  +LocalDateTime createdAt
+}
+class Attachment {
+  +Long id
+  +String fileName
+  +String fileUrl
+  +String fileType
+  +Long fileSize
+  +LocalDateTime createdAt
+}
+
+class Role {
+  <<enumeration>>
+  USER
+  ADMIN
+}
+class TaskStatus {
+  <<enumeration>>
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+}
+
+AuthController --> AuthService
+ProjectController --> ProjectService
+TaskController --> TaskService
+UserController --> UserRepository
+
+AuthService --> UserRepository
+AuthService --> JwtService
+AuthService --> TokenBlacklistService
+
+ProjectService --> ProjectRepository
+ProjectService --> UserRepository
+
+TaskService --> TaskRepository
+TaskService --> UserRepository
+TaskService --> ProjectService
+TaskService --> TaskCommentRepository
+TaskService --> AttachmentRepository
+
+SecurityConfig --> JwtAuthenticationFilter
+SecurityConfig --> CustomUserDetailsService
+JwtAuthenticationFilter --> JwtService
+JwtAuthenticationFilter --> CustomUserDetailsService
+JwtAuthenticationFilter --> TokenBlacklistService
+CustomUserDetailsService --> UserRepository
+
+User --> Role
+Task --> TaskStatus
+
+Project "0..*" --> "1" User : owner
+Project "0..*" --> "0..*" User : members
+Task "0..*" --> "1" Project : project
+Task "0..*" --> "1" User : createdBy
+Task "0..*" --> "1" User : assignedTo
+TaskComment "0..*" --> "1" Task : task
+TaskComment "0..*" --> "1" User : author
+Attachment "0..*" --> "1" Task : task
+Attachment "0..*" --> "1" User : uploadedBy
+```
