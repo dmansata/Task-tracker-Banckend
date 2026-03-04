@@ -99,9 +99,3 @@ Authorization: Bearer <jwt-token>
 - `POST /api/tasks/{taskId}/attachments`
 - `GET /api/tasks/{taskId}/attachments`
 
-## Notes
-- Real file upload storage and real-time notifications (WebSocket/SSE) are not included in this baseline.
-- AI-assisted task description generation is also not included yet, but can be added as a separate service integration.
-
-## Submission Guidance
-From this local project, push `task-tracker-backend` to a public GitHub repository and open a PR from your feature branch.
