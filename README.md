@@ -99,7 +99,6 @@ Authorization: Bearer <jwt-token>
 - `POST /api/tasks/{taskId}/attachments`
 - `GET /api/tasks/{taskId}/attachments`
 
-
 ## UML Diagram
 
 ```mermaid
